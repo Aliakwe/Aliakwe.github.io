@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stow app</title>
+  </head>
+  <body>
+    <div
+      style="
+        background-color: white;
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+        height: 400px;
+        border: 1px solid aliceblue;
+        padding: 24px;
+      "
+    >
+      <div style="margin-top: 12px">Dear User,</div>
+      <div style="margin-top: 24px; line-height: 1.6">
+        Thank you for signing up to STOW. To enjoy the full functionality of the
+        STOW App, please click the button below to verify your email address.
+      </div>
+      <button
+        onclick="handleVerifyEmail(auth, actionCode, lang)"
+        style="
+          margin-top: 24px;
+          padding: 12px;
+          background-color: skyblue;
+          border-color: transparent;
+          border-radius: 2px;
+        "
+      >
+        Verify your email
+      </button>
+      <div style="margin-top: 24px">Kind regards,</div>
+      <div style="margin-top: 24px">Your STOW Team</div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+
+    <script>
+      document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+          // TODO: Implement getParameterByName()
+
+          // Get the action to complete.
+          var mode = getParameterByName('mode');
+          // Get the one-time code from the query parameter.
+          var actionCode = getParameterByName('oobCode');
+          // (Optional) Get the continue URL from the query parameter if available.
+          //   var continueUrl = getParameterByName('continueUrl');
+          // (Optional) Get the language code if available.
+          var lang = getParameterByName('lang') || 'en';
+
+          // Configure the Firebase SDK.
+          // This is the minimum configuration required for the API to be used.
+          var config = {
+            apiKey: 'AIzaSyANAKdIUm0EZJkKzcCBpq1ROzMlRbr0mN4', // Copy this key from the web initialization
+            // snippet found in the Firebase console.
+          };
+          var app = firebase.initializeApp(config);
+          var auth = app.auth();
+
+          // Handle the user management action.
+          //   switch (mode) {
+          //     case 'verifyEmail':
+          //       // Display email verification handler and UI.
+          //       handleVerifyEmail(auth, actionCode, continueUrl, lang);
+          //       break;
+          //     default:
+          //     // Error: invalid mode.
+          //   }
+        },
+        false
+      );
+
+      function handleVerifyEmail(auth, actionCode, lang) {
+        // Localize the UI to the selected language as determined by the lang
+        // parameter.
+        // Try to apply the email verification code.
+        auth
+          .applyActionCode(actionCode)
+          .then(function (resp) {
+            // Email address has been verified.
+            // TODO: Display a confirmation message to the user.
+            // You could also provide the user with a link back to the app.
+            // TODO: If a continue URL is available, display a button which on
+            // click redirects the user back to the app via continueUrl with
+            // additional state determined from that URL's parameters.
+          })
+          .catch(function (error) {
+            // Code is invalid or expired. Ask the user to verify their email address
+            // again.
+          });
+      }
+    </script>
+  </body>
+</html>
